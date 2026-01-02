@@ -734,6 +734,7 @@ export default {
     proxyGroup: '代理组',
     setSystemProxy: '设置系统代理',
     clearSystemProxy: '清除系统代理',
+    copyTerminalProxyCmd: '复制终端代理命令',
     tun: 'Tun模式',
     enableTunMode: '启用TUN模式',
     disableTunMode: '禁用TUN模式',

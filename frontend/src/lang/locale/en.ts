@@ -735,6 +735,7 @@ export default {
     proxyGroup: 'Proxy Group',
     setSystemProxy: 'Set System Proxy',
     clearSystemProxy: 'Clear System Proxy',
+    copyTerminalProxyCmd: 'Copy Terminal Proxy Cmd to Clipboard',
     tun: 'Tun Mode',
     enableTunMode: 'Enable Tun Mode',
     disableTunMode: 'Disable Tun Mode',

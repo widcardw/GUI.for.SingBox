@@ -76,6 +76,45 @@ export const useEnvStore = defineStore('env', () => {
     systemProxy.value = false
   }
 
+  const copyTerminalProxyCmd = async () => {
+    const os = env.value.os
+    if (os === '') {
+      // not initialized
+      return false
+    }
+
+    let proxyPort = kernelApiStore.getProxyPort()
+    if (!proxyPort)
+      await kernelApiStore.updateConfig('inbound', undefined)
+
+    proxyPort = kernelApiStore.getProxyPort()
+    if (!proxyPort) throw 'home.overview.needPort'
+
+    let proxyCmd = ''
+    switch (os) {
+      case 'windows': {
+        proxyCmd = (
+          `set http_proxy=http://127.0.0.1:${proxyPort.port}\n` +
+          `set https_proxy=http://127.0.0.1:${proxyPort.port}\n` +
+          `set all_proxy=http://127.0.0.1:${proxyPort.port}\n\n` +
+          `set HTTP_PROXY=http://127.0.0.1:${proxyPort.port}\n` +
+          `set HTTPS_PROXY=http://127.0.0.1:${proxyPort.port}\n` +
+          `set ALL_PROXY=http://127.0.0.1:${proxyPort.port}`
+        )
+        break
+      }
+      default: {
+        proxyCmd = (
+          `export http_proxy=http://127.0.0.1:${proxyPort.port}\n` +
+          `export https_proxy=http://127.0.0.1:${proxyPort.port}`
+        )
+      }
+    }
+
+    await window.navigator.clipboard.writeText(proxyCmd)
+  }
+
+
   const switchSystemProxy = async (enable: boolean) => {
     if (enable) await setSystemProxy()
     else await clearSystemProxy()
@@ -89,6 +128,7 @@ export const useEnvStore = defineStore('env', () => {
     systemProxy,
     setSystemProxy,
     clearSystemProxy,
+    copyTerminalProxyCmd,
     switchSystemProxy,
     updateSystemProxyStatus,
   }

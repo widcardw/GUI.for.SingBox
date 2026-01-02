@@ -213,24 +213,42 @@ const getTrayMenus = () => {
       type: 'separator',
       hidden: !kernelApiStore.running,
     },
+    // {
+    //   type: 'item',
+    //   text: 'tray.proxy',
+    //   hidden: !kernelApiStore.running,
+    //   children: [
+    //     {
+    //       type: 'item',
+    //       text: 'tray.setSystemProxy',
+    //       hidden: envStore.systemProxy,
+    //       event: envStore.setSystemProxy,
+    //     },
+    //     {
+    //       type: 'item',
+    //       text: 'tray.clearSystemProxy',
+    //       hidden: !envStore.systemProxy,
+    //       event: envStore.clearSystemProxy,
+    //     },
+    //   ],
+    // },
     {
       type: 'item',
-      text: 'tray.proxy',
+      text: 'tray.setSystemProxy',
+      hidden: !kernelApiStore.running || envStore.systemProxy,
+      event: envStore.setSystemProxy,
+    },
+    {
+      type: 'item',
+      text: 'tray.clearSystemProxy',
+      hidden: !kernelApiStore.running || !envStore.systemProxy,
+      event: envStore.clearSystemProxy,
+    },
+    {
+      type: 'item',
+      text: 'tray.copyTerminalProxyCmd',
       hidden: !kernelApiStore.running,
-      children: [
-        {
-          type: 'item',
-          text: 'tray.setSystemProxy',
-          hidden: envStore.systemProxy,
-          event: envStore.setSystemProxy,
-        },
-        {
-          type: 'item',
-          text: 'tray.clearSystemProxy',
-          hidden: !envStore.systemProxy,
-          event: envStore.clearSystemProxy,
-        },
-      ],
+      event: envStore.copyTerminalProxyCmd,
     },
     {
       type: 'item',

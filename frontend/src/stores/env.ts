@@ -108,7 +108,8 @@ export const useEnvStore = defineStore('env', () => {
       }
     }
 
-    await ClipboardSetText(proxyCmd)
+    const ok = await ClipboardSetText(proxyCmd)
+    if (!ok) throw 'home.overview.copyFailed'
   }
 
   const switchSystemProxy = async (enable: boolean) => {

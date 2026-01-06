@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
-import { GetEnv } from '@/bridge'
+import { ClipboardSetText, GetEnv } from '@/bridge'
 import { useAppSettingsStore, useKernelApiStore } from '@/stores'
 import { updateTrayAndMenus, SetSystemProxy, GetSystemProxy } from '@/utils'
 
@@ -84,8 +84,7 @@ export const useEnvStore = defineStore('env', () => {
     }
 
     let proxyPort = kernelApiStore.getProxyPort()
-    if (!proxyPort)
-      await kernelApiStore.updateConfig('inbound', undefined)
+    if (!proxyPort) await kernelApiStore.updateConfig('inbound', undefined)
 
     proxyPort = kernelApiStore.getProxyPort()
     if (!proxyPort) throw 'home.overview.needPort'
@@ -93,27 +92,24 @@ export const useEnvStore = defineStore('env', () => {
     let proxyCmd = ''
     switch (os) {
       case 'windows': {
-        proxyCmd = (
+        proxyCmd =
           `set http_proxy=http://127.0.0.1:${proxyPort.port}\n` +
           `set https_proxy=http://127.0.0.1:${proxyPort.port}\n` +
           `set all_proxy=http://127.0.0.1:${proxyPort.port}\n\n` +
           `set HTTP_PROXY=http://127.0.0.1:${proxyPort.port}\n` +
           `set HTTPS_PROXY=http://127.0.0.1:${proxyPort.port}\n` +
           `set ALL_PROXY=http://127.0.0.1:${proxyPort.port}`
-        )
         break
       }
       default: {
-        proxyCmd = (
+        proxyCmd =
           `export http_proxy=http://127.0.0.1:${proxyPort.port}\n` +
           `export https_proxy=http://127.0.0.1:${proxyPort.port}`
-        )
       }
     }
 
-    await window.navigator.clipboard.writeText(proxyCmd)
+    await ClipboardSetText(proxyCmd)
   }
-
 
   const switchSystemProxy = async (enable: boolean) => {
     if (enable) await setSystemProxy()
